@@ -3,6 +3,11 @@ const morgan = require('morgan')
 const exphbs = require('express-handlebars')
 const path = require('path')
 
+const flash = require('connect-flash')
+const session = require('express-session')
+const MySQLStore =  require('express-mysql-session')
+const { database } = require('./keys')
+
 // inicializaciones
 const app = express()
 
@@ -23,13 +28,24 @@ app.set('view engine', '.hbs')
 //----------------------------------------------------------------
 
 // midlewares
+app.use(session({
+    secret: 'tutruru',
+    resave: false,
+    saveUninitialized: false,
+    store: new MySQLStore(database)
+    }))                                         // es obligatorio definir la sesion antes de usar flash
+app.use(flash())                                // enviar mensajes entre vistas
+
 app.use(morgan('dev'))
 app.use(express.urlencoded({extended: false}))  // acepta datos sencillos de un formulario
 app.use(express.json())                         // aceptar llamadas desde un cliente (API)
 
 
+
+
 // Global variables
 app.use((req, res, next) => {                   // Intercepta todas las llamadas al servidor
+    app.locals.success = req.flash('success')   // Defino la variable global success. Se puede recuperar desde cualquier vista
     next()                                      // sigue su curso
 })
 

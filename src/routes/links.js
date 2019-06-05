@@ -45,7 +45,8 @@ router.post('/edit/:id', async (req,res) => {
         description
     }
 
-    await pool.query('UPDATE links SET title = ?, url = ?, description = ? WHERE id = ?', [title, url, description, id])
+    // await pool.query('UPDATE links SET title = ?, url = ?, description = ? WHERE id = ?', [title, url, description, id])
+    await pool.query('UPDATE links set ? WHERE id = ?', [newLink, id])
     res.redirect('/links')
 })
 

@@ -8,14 +8,20 @@ const session = require('express-session')
 const MySQLStore =  require('express-mysql-session')
 const { database } = require('./keys')
 
+const passport = require('passport')
+
+
 // inicializaciones
 const app = express()
+require('./lib/passport')
 
 // settings
 app.set('port', process.env.PORT || 4000)
 
 //------ configurar las rutas necesarias para utilizar handlebars
 app.set('views', path.join(__dirname, 'views'))
+
+console.log(`views: ${app.get('views')}`)
 
 app.engine('hbs', exphbs({
     defaultLayout: 'main',
@@ -25,10 +31,13 @@ app.engine('hbs', exphbs({
     helpers: require('./lib/handlebars')
 }))
 app.set('view engine', '.hbs')
+
+console.log(`LayoutDir: ${path.join(app.get('views'), 'layouts')}`)
+console.log(`partialsDir: ${path.join(app.get('views'), 'partials')}`)
 //----------------------------------------------------------------
 
 // midlewares
-app.use(session({
+app.use(session({   
     secret: 'tutruru',
     resave: false,
     saveUninitialized: false,
@@ -40,7 +49,8 @@ app.use(morgan('dev'))
 app.use(express.urlencoded({extended: false}))  // acepta datos sencillos de un formulario
 app.use(express.json())                         // aceptar llamadas desde un cliente (API)
 
-
+app.use(passport.initialize())  // Inicia passport
+app.use(passport.session())     // Crea una session para passport
 
 
 // Global variables

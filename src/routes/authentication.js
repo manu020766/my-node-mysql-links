@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
+const { isLoggedIn } = require('../lib/auth')
+
 //--------------------------------------------- Signin (formulario)
 router.get('/signin', (req, res) => {
     res.render('auth/signin')
@@ -30,7 +32,7 @@ router.post('/signup', passport.authenticate('local.signup', {
   }));
 
 
-router.get('/profile', (req, res)=> {
+router.get('/profile', isLoggedIn, (req, res)=> {   // Con isLoggedIn protejo el acceso a la ruta
     res.render('profile')
 })
 

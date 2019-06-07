@@ -57,6 +57,8 @@ app.use(passport.session())     // Crea una session para passport
 app.use((req, res, next) => {                   // Intercepta todas las llamadas al servidor
     app.locals.success = req.flash('success')   // Defino la variable global success. Se puede recuperar desde cualquier vista
     app.locals.message = req.flash('message')   // Defino la variable global success. Se puede recuperar desde cualquier vista
+
+    app.locals.user = req.user                  // Recupero los datos del usuario de la session donde se encuentra
     next()                                      // sigue su curso
 })
 

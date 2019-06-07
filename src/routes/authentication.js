@@ -31,7 +31,12 @@ router.post('/signup', passport.authenticate('local.signup', {
 
 
 router.get('/profile', (req, res)=> {
-    res.send('profile')
+    res.render('profile')
+})
+
+router.get('/logout', (req, res)=> {
+    req.logOut()
+    res.redirect('/signin')
 })
 
 module.exports = router

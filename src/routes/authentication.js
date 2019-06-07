@@ -2,20 +2,25 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
-router.get('/signup', (req, res)=> {
-    res.render('auth/signup')
+//--------------------------------------------- Signin (formulario)
+router.get('/signin', (req, res) => {
+    res.render('auth/signin')
 })
 
 //---------------------- Es otra forma de especificar la autenticacion de la ruta, funciona como la función de abajo.
-// router.post('/signup', (req, res)=> {
-//     passport.authenticate('local.signup', {
-//         successRedirect: '/profile',
-//         failureRedirect: '/signup',
-//         failureFlash: true
-//     })
+router.post('/signin', (req, res, next)=> {
+    passport.authenticate('local.signin', {
+        successRedirect: '/profile',
+        failureRedirect: '/signin',
+        failureFlash: true
+    })(req, res, next)
+})
 
-//     res.send('received')
-// })
+
+//--------------------------------------------- Signup (formulario)
+router.get('/signup', (req, res)=> {
+    res.render('auth/signup')
+})
 
 //---------------------- Es otra forma de especificar la autenticacion de la ruta, funciona como la función de arriba.
 router.post('/signup', passport.authenticate('local.signup', {
